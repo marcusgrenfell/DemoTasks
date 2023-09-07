@@ -1,0 +1,21 @@
+---
+- name: Install and configure backend/netdata server
+  hosts: backend
+  become: yes
+
+  tasks:
+  - name: set hostname
+    ansible.builtin.hostname: name=u21.local
+  - name: add netdata repo key
+    ansible.builtin.apt_key:
+      url: https://repo.netdata.cloud/netdatabot.gpg.key
+      state: present
+  - name: add netdata repo
+    ansible.builtin.apt_repository: 
+      repo : deb http://repo.netdata.cloud/repos/stable/ubuntu/ jammy/
+      state: present
+      filename: netdata
+  - name: install netdata
+    ansible.builtin.apt:
+      name: netdata
+      state: present
